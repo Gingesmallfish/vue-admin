@@ -2,9 +2,12 @@
   <div class="login-container">
     <!-- 左侧图片及文字 -->
     <div class="left-column">
+      <div class="overlay"></div>
       <div class="left-content">
-        <h1 class="title">{{ props.title }}</h1>
-        <p class="description">开启教务管理新体验</p>
+        <h1 class="title">{{ title }}</h1>
+        <div class=" w-1/3 text-white overflow-hidden ">
+          <p class="description">开启教务管理新体验</p>
+        </div>
       </div>
     </div>
     <!-- 右侧登录表单 -->
@@ -26,18 +29,18 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { ElMessage } from 'element-plus';
+import {onMounted, ref, watch} from 'vue';
+import {useRouter} from 'vue-router';
+import {ElMessage} from 'element-plus';
 import store from '@/store';
 import LoginForm from "@/components/Auth/LoginForm.vue";
-import { useCaptcha } from '@/utils/Captcha.js';
-import { login } from "@/api/auth";
+import {useCaptcha} from '@/utils/Captcha.js';
+import {login} from "@/api/auth";
 
-const { captchaUrl, refreshCaptcha } = useCaptcha();
+const {captchaUrl, refreshCaptcha} = useCaptcha();
 const router = useRouter();
 
-const props = defineProps({
+defineProps({
   title: {
     type: String,
     default: '教务管理系统登录'
@@ -50,10 +53,10 @@ const countdown = ref(0);
 const handleSubmit = (loginData) => {
   login(loginData)
       .then((res) => {
-        const { data } = res;
+        const {data} = res;
         if (data.message === '登录成功') {
-          const { token, user } = data;
-          store.dispatch('login', { token, user });
+          const {token, user} = data;
+          store.dispatch('login', {token, user});
           ElMessage.success('登录成功');
           router.push('/admin');
         } else {
@@ -63,7 +66,7 @@ const handleSubmit = (loginData) => {
       })
       .catch((error) => {
         console.error(error);
-        ElMessage.error('登录失败，60s之后重新登录 😀');
+        ElMessage.error('登录失败，60s之后重新登录 ');
         startCountdown();
       });
 };
@@ -101,29 +104,40 @@ watch(countdown, (newCountdown) => {
   @apply flex flex-wrap min-h-screen cursor-pointer bg-gray-100;
 
   .left-column {
-    @apply lg:w-2/5 md:w-1/2 w-full bg-cover bg-center;
+    @apply lg:w-2/5 md:w-1/2 w-full bg-cover bg-center relative;
     background-image: url('@/assets/images/register.png');
 
-    .left-content {
-      @apply flex flex-col h-full justify-center items-center p-8;
+    .overlay {
+      @apply absolute inset-0 bg-black bg-opacity-50;
+      /* 调整不透明度 */
+    }
 
-      .title,
-      .description {
-        @apply bg-black bg-opacity-20 px-4 py-2 rounded-md;
-      }
+    .left-content {
+      @apply relative flex flex-col h-full justify-center items-center p-8  bg-opacity-30;
 
       .title {
-        @apply text-4xl font-bold mb-4 text-white;
+        @apply text-4xl font-bold text-white mb-4;
       }
 
       .description {
-        @apply text-lg text-center text-white;
+        @apply  w-max whitespace-nowrap;
+        animation: roll 5s linear infinite;
+
+        &::before {
+          content: '';
+          display: inline-block;
+          // 这里的长度需要与最外层容器一致
+          width: 13rem;
+          height: 100%;
+        }
       }
     }
+
+
   }
 
   .right-column {
-    @apply lg:w-3/5 md:w-1/2 w-full flex justify-center items-center p-8;
+    @apply lg:w-3/5 md:w-1/2 w-full flex justify-center items-center p-8 relative;
 
     .form-container {
       @apply w-full max-w-md bg-white p-8 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out;
@@ -156,6 +170,17 @@ watch(countdown, (newCountdown) => {
   animation: fadeIn 0.5s ease-out;
 }
 
+
+@keyframes roll {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
+}
+
 // 淡入动画关键帧
 @keyframes fadeIn {
   from {
@@ -167,8 +192,6 @@ watch(countdown, (newCountdown) => {
     transform: translateY(0);
   }
 }
-
-
 
 
 </style>
