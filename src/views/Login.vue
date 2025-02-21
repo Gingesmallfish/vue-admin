@@ -31,15 +31,17 @@
 <script setup>
 import {onMounted, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
-import {ElMessage} from 'element-plus';
+
 import store from '@/store';
 import LoginForm from "@/components/Auth/LoginForm.vue";
 import {useCaptcha} from '@/utils/Captcha.js';
 import {login} from "@/api/auth";
+import {ElMessage} from "element-plus";
 
 const {captchaUrl, refreshCaptcha} = useCaptcha();
 const router = useRouter();
 
+// 获取标题
 defineProps({
   title: {
     type: String,
@@ -47,8 +49,10 @@ defineProps({
   }
 });
 
+
 const loginDisabled = ref(false);
 const countdown = ref(0);
+
 
 const handleSubmit = (loginData) => {
   login(loginData)
@@ -56,9 +60,10 @@ const handleSubmit = (loginData) => {
         const {data} = res;
         if (data.message === '登录成功') {
           const {token, user} = data;
-          store.dispatch('login', {token, user});
-          ElMessage.success('登录成功');
-          router.push('/admin');
+          const {username, password, captcha} = loginData;
+          store.dispatch('login', {token, user, username, password, captcha});
+         ElMessage.success('登录成功');
+          router.push('/Admin');
         } else {
           ElMessage.error(data.message);
           refreshCaptcha();
@@ -120,7 +125,7 @@ watch(countdown, (newCountdown) => {
       }
 
       .description {
-        @apply  w-max whitespace-nowrap;
+        @apply w-max whitespace-nowrap;
         animation: roll 5s linear infinite;
 
         &::before {

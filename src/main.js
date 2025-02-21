@@ -1,6 +1,9 @@
 import {createApp} from 'vue'
 import App from './App.vue'
-import ElementPlus from 'element-plus'
+/**
+ * 全局导入，然后我们后这里不需要去用全局导入了，element-puls组件库了，我们这里使用按需映入，
+ * 是在vite.config.js配置了全局导入，这里就不需要了 我这里不需要了直接删掉了
+ */
 import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import router from './router'
@@ -13,20 +16,16 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 
-
-app.use(ElementPlus)
 app.use(store)
 app.use(router)
-
 app.mount('#app')
-
 
 
 // 应用加载时检查登录状态
 if (!store.getters.isLoggedIn) {
   router.push('/login');
 } else {
-  router.push('/admin');
+  router.push('/Admin');
 }
 
 

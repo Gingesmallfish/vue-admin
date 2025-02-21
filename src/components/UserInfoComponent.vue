@@ -1,14 +1,10 @@
 <template>
-  <div>
-    menus
-  </div>
-</template>
 
+</template>
 
 <script setup>
 
 </script>
-
 
 <style scoped lang="scss">
 
