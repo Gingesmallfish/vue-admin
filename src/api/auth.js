@@ -1,19 +1,31 @@
-import axios from '@/axios.js';
+import http from '@/axios.js';
 
-// 登录请求
+/**
+ * 登录请求
+ * @param data 登录信息
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 export const login = (data) => {
-    return axios.post('/api/user/login', data);
+    return http.post('/api/user/login', data);
 };
 
-// 注册请求
+/**
+ *  注册信息
+ * @param data 注册信息
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 export const register = (data) => {
-    return axios.post('/api/user/registerAPI', data);
+    return http.post('/api/user/registerAPI', data);
 };
 
-// 获取验证码
+/**
+ * 获取验证码
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+
 export const getCaptcha = () => {
-    return axios.get('/api/user/captcha', {
-        responseType: 'arraybuffer'
+    return http.get('/api/user/captcha', {
+        responseType: 'arraybuffer' // 设置响应类型为二进制数据
     });
 };
 

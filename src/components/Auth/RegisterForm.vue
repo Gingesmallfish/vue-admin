@@ -104,7 +104,8 @@ import { register } from '@/api/auth';
 import { ElMessage } from 'element-plus';
 import { Lock, Unlock, User, Phone } from '@element-plus/icons-vue';
 import Captcha from "@/components/Auth/Captcha.vue";
-import { rules } from "@/utils/validationRules.js";
+import { rules , validateConfirmPassword, } from "@/utils/validationRules.js";
+
 
 const props = defineProps({
   captchaUrl: String,
@@ -170,6 +171,9 @@ const handleRegister = () => {
 const refreshCaptcha = () => {
   emit('refresh-captcha');
 };
+
+// 传递 registerForm 给我的工具验证规则
+rules.confirmPassword[1].validator = (rule, value, callback) => validateConfirmPassword(registerForm)(rule, value, callback);
 </script>
 
 <style scoped lang="scss">

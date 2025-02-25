@@ -62,7 +62,7 @@ const handleSubmit = (loginData) => {
           const {token, user} = data;
           const {username, password, captcha} = loginData;
           store.dispatch('login', {token, user, username, password, captcha});
-         ElMessage.success('登录成功');
+          ElMessage.success('登录成功');
           router.push('/Admin');
         } else {
           ElMessage.error(data.message);

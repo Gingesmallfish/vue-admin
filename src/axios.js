@@ -3,7 +3,7 @@ import store from '@/store';
 import router from "@/router/index.js";
 
 const http = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'http://localhost:3000', // 与 Vite 代理配置匹配
     headers: {
         'Content-Type': 'application/json',
     },
@@ -41,7 +41,7 @@ http.interceptors.response.use(
                     router.push('/login');
                     break;
                 case 404:
-                    console.error('请求的资源未找到');
+                    console.error('请求的资源未找到',);
                     break;
                 case 500:
                     console.error('服务器内部错误');

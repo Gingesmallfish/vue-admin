@@ -2,8 +2,8 @@
   <div class="common-layout">
     <el-container>
       <!-- 侧边栏，引入 Menus 组件 -->
-      <el-aside width="200px">
-        <Menus />
+      <el-aside width="250px">
+        <Menus/>
       </el-aside>
       <el-container>
         <!-- 头部，引入 FHeader 组件并监听 showProfile 事件 -->
@@ -42,22 +42,21 @@ const showProfile = () => {
 const hideProfile = () => {
   isProfileVisible.value = false;
 };
-
 </script>
 
 <style scoped lang="scss">
 .common-layout {
-  @apply h-screen;
+  @apply h-screen bg-gray-200 text-gray-900;
 
   .el-container {
     @apply h-full;
 
     .el-aside {
-      @apply bg-gray-800 text-white;
+      @apply bg-gray-700 text-gray-900;
     }
 
     .el-header {
-      @apply bg-indigo-500 text-white;
+      @apply bg-violet-500 text-gray-900;
     }
 
     .el-main {
@@ -74,7 +73,7 @@ const hideProfile = () => {
       }
 
       &::-webkit-scrollbar-track {
-        @apply bg-gray-200 rounded;
+        @apply bg-gray-100 rounded;
       }
     }
   }

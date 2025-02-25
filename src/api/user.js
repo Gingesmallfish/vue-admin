@@ -1,26 +1,20 @@
-import axios from '@/axios'
+import http from '@/axios'
 
-// 退出登录
+/**
+ * 推出功能
+ * @param id
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
 export const logoutApi = (id) => {
-    return axios.get('/api/user/logout', id);
+    return http.get('/api/user/logout', id);
 };
 
 
-// 获取用户信息接口
-export const getUserInfo = (userId) => {
-    return axios.get(`/api/user/${userId}`);
-};
-
-// 更新用户简介接口
-export const updateUserIntroduction = (userId, introduction) => {
-    return axios.post(`/api/user/${userId}/introduction`, { introduction });
-};
-
-// 上传用户头像接口
-export const uploadUserAvatar = (userId, formData) => {
-    return axios.post(`/api/user/${userId}/avatar`, formData, {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-    });
+/**
+ *  获取用户信息
+ * @param id
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export const getUserInfoApi = (id) => {
+    return http.get(`/avatar/user/${id}`);
 };

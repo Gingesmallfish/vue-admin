@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import {createStore} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
 // 创建 Vuex store 实例
@@ -18,7 +18,7 @@ const store = createStore({
     // 定义 mutations，用于修改 state
     mutations: {
         // 登录操作，设置 token、user、username、password 和 captcha
-        login(state, { token, user, username, password, captcha }) {
+        login(state, {token, user, username, password, captcha}) {
             state.token = token;
             state.user = user;
             state.username = username;
@@ -49,15 +49,15 @@ const store = createStore({
     // 定义 actions，用于处理异步操作并提交 mutations
     actions: {
         // 登录操作，提交 login mutation
-        login({ commit }, { token, user, username, password, captcha }) {
-            commit('login', { token, user, username, password, captcha });
+        login({commit}, {token, user, username, password, captcha}) {
+            commit('login', {token, user, username, password, captcha});
         },
         // 登出操作，提交 logout mutation
-        logout({ commit }) {
+        logout({commit}) {
             commit('logout');
         },
         // 设置重定向路径，提交 setRedirectPath mutation
-        setRedirectPath({ commit }, path) {
+        setRedirectPath({commit}, path) {
             commit('setRedirectPath', path);
         }
     },
