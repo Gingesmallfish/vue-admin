@@ -30,7 +30,6 @@ http.interceptors.request.use(
 // 响应拦截器
 http.interceptors.response.use(
     (response) => {
-        console.log('响应数据:', response);
         return response;
     },
     (error) => {

@@ -49,10 +49,8 @@ defineProps({
   }
 });
 
-
 const loginDisabled = ref(false);
 const countdown = ref(0);
-
 
 const handleSubmit = (loginData) => {
   login(loginData)
@@ -63,7 +61,7 @@ const handleSubmit = (loginData) => {
           const {username, password, captcha} = loginData;
           store.dispatch('login', {token, user, username, password, captcha});
           ElMessage.success('登录成功');
-          router.push('/Admin');
+          router.push('/admin'); // 确保这里正确跳转
         } else {
           ElMessage.error(data.message);
           refreshCaptcha();
@@ -137,8 +135,6 @@ watch(countdown, (newCountdown) => {
         }
       }
     }
-
-
   }
 
   .right-column {
@@ -175,7 +171,6 @@ watch(countdown, (newCountdown) => {
   animation: fadeIn 0.5s ease-out;
 }
 
-
 @keyframes roll {
   from {
     transform: translateX(0);
@@ -197,6 +192,4 @@ watch(countdown, (newCountdown) => {
     transform: translateY(0);
   }
 }
-
-
 </style>

@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 import store from '@/store';
 import { ElMessage } from 'element-plus';
-import Admin from "@/views/component/Admin.vue";
 
 const defaultRoutes = [
     {
@@ -13,7 +12,7 @@ const defaultRoutes = [
     {
         path: '/admin',
         name: 'Admin',
-        component: Admin,
+        component: () => import('@/views/component/admin.vue'), // 确保路径正确
         meta: { requiresAuth: true, title: '教务管理系统' },
         children: [] // 用于动态添加子路由
     },
@@ -37,7 +36,6 @@ const router = createRouter({
     routes: defaultRoutes
 });
 
-
 // 路由守卫
 router.beforeEach(async (to, from, next) => {
     // 设置页面标题
@@ -54,13 +52,4 @@ router.beforeEach(async (to, from, next) => {
     }
 });
 
-
-
-// 获取并动态添加路由
-const addRoutes = (routes) => {
-    routes.forEach(route => {
-        path: route.path,
-            name
-    })
-}
 export default router;

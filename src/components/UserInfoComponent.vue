@@ -52,6 +52,7 @@ const fetchUserInfo = async () => {
       '2': '教师',
       '3': '管理员',
     };
+    // 映射 role 到 roleName
     userInfo.value.roleName = roleMap[userInfo.value.role] || '未知';
   } catch (error) {
     console.error('获取用户信息失败:', error);
