@@ -1,6 +1,9 @@
-import http from "@/axios.js";
+import http from "../axios.js";
 
 export const getMenus = () => {
-  return http.get("/api/menus");
+  return http({
+    url: "/api/menus",
+    method: "get",
+  })
 
 };

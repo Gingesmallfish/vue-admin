@@ -42,8 +42,8 @@ const userInfo = ref({
 
 const fetchUserInfo = async () => {
   try {
-    const userId = 1; // 假设用户 ID 为 2，可以根据实际需求动态获取
-    const res = await getUserInfoApi(userId);
+    const id = 1; // 假设用户 ID 为 2，可以根据实际需求动态获取
+    const res = await getUserInfoApi(id);
     userInfo.value = res.data;
 
     // 映射 role 到 roleName

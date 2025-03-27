@@ -1,5 +1,6 @@
 import {createStore} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import {login} from "@/api/auth.js";
 
 // 创建 Vuex store 实例
 const store = createStore({
@@ -35,7 +36,7 @@ const store = createStore({
         },
         // 切换侧边栏宽度
         handleAsideWidth(state) {
-            state.asideWidth = state.asideWidth === "250px" ? "64px" : "250px";
+            state.asideWidth = state.asideWidth === "250px" ? "65px" : "250px";
         },
         // 设置用户信息
         setUserInfo(state, userInfo) {

@@ -1,6 +1,7 @@
 import axios from 'axios';
-import store from '@/store';
-import router from "@/router/index.js";
+import store from './store/index.js';
+import router from "./router/index.js";
+import {ElMessage} from "element-plus";
 
 const http = axios.create({
     baseURL: 'http://localhost:3000', // 与 Vite 代理配置匹配
@@ -16,46 +17,27 @@ http.interceptors.request.use(
     (config) => {
         const token = store.getters.isLoggedIn ? store.state.token : null;
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
-        console.log('请求配置:', config);
         return config;
     },
     (error) => {
-        console.error('请求拦截器错误:', error);
+
         return Promise.reject(error);
     }
 );
 
 // 响应拦截器
-http.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    (error) => {
-        if (error.response) {
-            switch (error.response.status) {
-                case 401:
-                    store.dispatch('logout');
-                    router.push('/login');
-                    break;
-                case 404:
-                    console.error('请求的资源未找到',);
-                    break;
-                case 500:
-                    console.error('服务器内部错误');
-                    break;
-                default:
-                    console.error(`未知错误，状态码: ${error.response.status}`);
-            }
-        } else if (error.request) {
-            console.error('请求已发送，但没有收到响应');
-        } else {
-            console.error('请求设置时发生错误', error.message);
-        }
-        console.error('响应拦截器错误:', error);
-        return Promise.reject(error);
+http.interceptors.response.use(response => {
+    return response;
+}, error => {
+    if (error.response?.status === 401) {
+        ElMessage.error('登录已过期，请重新登录');
+        store.commit('logout'); // 清空登录状态
+        router.push('/login'); // 跳转到登录页
     }
-);
+    return Promise.reject(error);
+});
+
 
 export default http;

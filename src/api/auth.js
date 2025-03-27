@@ -1,4 +1,4 @@
-import http from '@/axios.js';
+import http from '../axios.js';
 
 /**
  * 登录请求

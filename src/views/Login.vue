@@ -32,10 +32,10 @@
 import {onMounted, ref, watch} from 'vue';
 import {useRouter} from 'vue-router';
 
-import store from '@/store';
-import LoginForm from "@/components/Auth/LoginForm.vue";
-import {useCaptcha} from '@/utils/Captcha.js';
-import {login} from "@/api/auth";
+import store from '../store/index.js';
+import LoginForm from "../components/Auth/LoginForm.vue";
+import {useCaptcha} from '../utils/Captcha.js';
+import {login} from "../api/auth";
 import {ElMessage} from "element-plus";
 
 const {captchaUrl, refreshCaptcha} = useCaptcha();

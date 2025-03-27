@@ -1,4 +1,4 @@
-import http from '@/axios'
+import http from '../axios.js'
 
 /**
  * 推出功能
@@ -16,5 +16,5 @@ export const logoutApi = (id) => {
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
 export const getUserInfoApi = (id) => {
-    return http.get(`/avatar/user/${id}`);
+    return http.get(`/api/personal/user/${id}`);
 };

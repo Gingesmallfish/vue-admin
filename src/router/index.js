@@ -1,34 +1,8 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import store from '@/store';
-import { ElMessage } from 'element-plus';
-
-const defaultRoutes = [
-    {
-        path: '/login',
-        name: 'Login',
-        component: () => import('@/views/Login.vue'),
-        meta: { title: '教务管理系统登录' }
-    },
-    {
-        path: '/admin',
-        name: 'Admin',
-        component: () => import('@/views/component/admin.vue'), // 确保路径正确
-        meta: { requiresAuth: true, title: '教务管理系统' },
-        children: [] // 用于动态添加子路由
-    },
-    {
-        path: '/register',
-        name: 'Register',
-        component: () => import('@/views/Register.vue'),
-        meta: { title: '教务管理系统注册' }
-    },
-    {
-        path: '/:pathMatch(.*)*',
-        name: 'NotFound',
-        component: () => import('@/NotFound/404.vue'),
-        meta: { title: '404 页面' }
-    },
-];
+import {createRouter, createWebHashHistory} from 'vue-router';
+import store from '../store/index.js';
+import {ElMessage} from 'element-plus';
+import {getMenus} from "../api/menusAPI.js";
+import defaultRoutes from './config.js';
 
 // 创建路由
 const router = createRouter({
@@ -51,5 +25,50 @@ router.beforeEach(async (to, from, next) => {
         next();
     }
 });
+
+// 动态添加路由的方法
+export function addRoutes(routes) {
+    try {
+        routes.forEach(route => {
+            if (!router.hasRoute(route.name)) {
+                router.addRoute('admin', route);
+            }
+        });
+    } catch (error) {
+        console.error('动态添加路由失败:', error);
+        throw error;
+    }
+}
+
+// 动态添加菜单路由
+export const fetchMenuTree = async () => {
+    try {
+        const response = await getMenus();
+        if (response.data && response.data.data) {
+            const menuTree = response.data.data;
+
+            // 处理动态路由
+            const dynamicRoutes = menuTree
+                .filter(item => !item.is_title)
+                .map(item => ({
+                    path: item.path,
+                    name: item.name,
+                    component: () => import(`@/component/${item.component}.vue`),
+                    meta: {requiresAuth: true, title: item.name}
+                }));
+
+            // 添加动态路由
+            addRoutes(dynamicRoutes);
+            return menuTree;
+        }
+        return [];
+    } catch (error) {
+        console.error('获取菜单数据失败:', error);
+        throw error;
+    }
+};
+
+// 初始化动态路由
+fetchMenuTree();
 
 export default router;
