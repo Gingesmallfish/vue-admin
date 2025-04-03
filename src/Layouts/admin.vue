@@ -4,7 +4,7 @@
     <el-container class="min-h-screen">
       <!-- 侧边栏 -->
       <el-aside :width="$store.state.asideWidth" class="transition-all duration-300 bg-white border-r shadow-xm">
-        <Sidebar :is-collapse="$store.state.asideWidth === '64px'" />
+        <Menus :is-collapse="$store.state.asideWidth === '65px'" />
       </el-aside>
 
       <!-- 主内容区域 -->
@@ -29,11 +29,11 @@
 import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 // 引入 FHeader 组件
-import FHeader from "../Layouts/Header.vue";
+import FHeader from "./components/Header.vue";
 // 引入 Profile 组件
-import Profile from "../Layouts/Profile.vue";
-// 引入 Sidebar 组件
-import Sidebar from "../Layouts/Sidebar.vue";
+import Profile from "./components/Profile.vue";
+// 引入 Menus 组件
+import Menus from "./components/Menus.vue";
 
 const route = useRoute();
 

@@ -16,8 +16,8 @@
 </template>
 
 <script setup>
-import AvatarComponent from "../components/AvatarComponent.vue";
-import UserInfoComponent from "../components/UserInfoComponent.vue";
+import AvatarComponent from "@/components/AvatarComponent.vue";
+import UserInfoComponent from "@/components/UserInfoComponent.vue";
 </script>
 
 <style scoped lang="scss">

@@ -1,0 +1,90 @@
+{
+  "sidebar": [
+    {
+      "id": 1,
+      "title": "首页",
+      "icon": "House",
+      "path": "/"
+    },
+    {
+      "id": 2,
+      "title": "日志管理",
+      "icon": "Document",
+      "link": "/logs"
+    },
+    {
+      "id": 3,
+      "title": "用户管理",
+      "icon": "User",
+      "link": "/users",
+      "children": [
+        {
+          "id": 4,
+          "title": "用户权限",
+          "icon": "Lock",
+          "link": "/users/permissions"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "教程管理",
+      "icon": "Reading",
+      "link": "/tutorials",
+      "children": [
+        {
+          "id": 6,
+          "title": "教程材料",
+          "icon": "Files",
+          "link": "/tutorials/materials"
+        },
+        {
+          "id": 7,
+          "title": "教学任务",
+          "icon": "List",
+          "link": "/tutorials/tasks"
+        },
+        {
+          "id": 8,
+          "title": "课程管理",
+          "icon": "Collection",
+          "link": "/tutorials/courses"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "实验室管理",
+      "icon": "Monitor",
+      "link": "/labs",
+      "children": [
+        {
+          "id": 10,
+          "title": "实验室预约",
+          "icon": "Calendar",
+          "link": "/labs/reservations"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "title": "教师管理",
+      "icon": "UserFilled",
+      "link": "/teachers",
+      "children": [
+        {
+          "id": 12,
+          "title": "成绩管理",
+          "icon": "Histogram",
+          "link": "/teachers/grades"
+        },
+        {
+          "id": 13,
+          "title": "考试管理",
+          "icon": "Edit",
+          "link": "/teachers/exams"
+        }
+      ]
+    }
+  ]
+}

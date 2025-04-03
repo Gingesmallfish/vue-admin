@@ -55,7 +55,7 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { ArrowDown, SwitchButton, User } from '@element-plus/icons-vue';
-import { logoutApi } from '../api/user.js';
+import { logoutApi } from '@/api/user.js';
 
 
 const avatarUrl = ref(''); // 初始头像
