@@ -15,6 +15,6 @@ export const logoutApi = (id) => {
  * @param id
  * @returns {Promise<axios.AxiosResponse<any>>}
  */
-export const getUserInfoApi = (id) => {
-    return http.get(`/api/personal/user/${id}`);
+export const getUserInfoApi = () => {
+    return http.get(`/api/user/info`);
 };

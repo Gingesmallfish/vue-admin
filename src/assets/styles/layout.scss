@@ -1,0 +1,36 @@
+// 倒入 Tailwind CSS
+@import "tailwindcss.css";
+
+// 全局样式
+body, html {
+  @apply m-0 p-0 box-border;
+}
+
+.common-layout {
+  @apply h-screen flex;
+
+  .el-header {
+    @apply bg-white border-b border-gray-200 shadow-sm flex items-center px-3 p-0;
+  }
+
+  .el-aside {
+    @apply bg-white border-r border-gray-200 shadow-sm transition-all duration-300;
+    width: 200px;
+
+    &.collapsed {
+      width: 65px;
+    }
+  }
+
+  .el-container {
+    @apply flex flex-col w-full;
+  }
+
+  .el-main {
+    @apply bg-gray-100 p-0 flex-1;
+  }
+
+  .el-footer {
+    @apply bg-white border-t border-gray-200 text-center p-3;
+  }
+}

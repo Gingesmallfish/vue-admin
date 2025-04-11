@@ -9,7 +9,7 @@ import 'element-plus/dist/index.css'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import router from './router'
 import store from './store'
-import './tailwindcss.scss'
+import './assets/styles/layout.scss'
 
 const app = createApp(App)
 // 注册 ElementPlus 图标
@@ -21,13 +21,5 @@ app.use(store)
 app.use(router)
 app.use(ElementPlus)
 app.mount('#app')
-
-
-// 应用加载时检查登录状态
-if (!store.getters.isLoggedIn) {
-  router.push('/login');
-} else {
-  router.push('/admin');
-}
 
 

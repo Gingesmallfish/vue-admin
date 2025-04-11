@@ -1,4 +1,3 @@
-
 <template>
   <el-dialog v-model="visible" :title="title" width="30%">
     <div class="flex flex-col items-center space-y-4">

@@ -5,7 +5,7 @@
       <el-input v-model="registerForm.username" placeholder="请输入用户名">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <User />
+            <User/>
           </el-icon>
         </template>
       </el-input>
@@ -16,7 +16,7 @@
       <el-input v-model="registerForm.password" type="password" placeholder="请输入密码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Lock />
+            <Lock/>
           </el-icon>
         </template>
       </el-input>
@@ -27,7 +27,7 @@
       <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Lock />
+            <Lock/>
           </el-icon>
         </template>
       </el-input>
@@ -38,7 +38,7 @@
       <el-input v-model="registerForm.name" placeholder="请输入姓名">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <User />
+            <User/>
           </el-icon>
         </template>
       </el-input>
@@ -47,10 +47,10 @@
     <!-- 性别 -->
     <el-form-item label="性别" prop="sex">
       <el-radio-group v-model="registerForm.sex" class="flex space-3">
-        <el-radio label="男" class="text-gray-700">男</el-radio>
-        <el-radio label="女" class="text-gray-700">女</el-radio>
-        <el-radio label="其他" class="text-gray-700">其他</el-radio>
-        <el-radio label="保密" class="text-gray-700">保密</el-radio>
+        <el-radio value="男" class="text-gray-700">男</el-radio>
+        <el-radio value="女" class="text-gray-700">女</el-radio>
+        <el-radio value="其他" class="text-gray-700">其他</el-radio>
+        <el-radio value="保密" class="text-gray-700">保密</el-radio>
       </el-radio-group>
     </el-form-item>
 
@@ -59,7 +59,7 @@
       <el-input v-model="registerForm.phone" placeholder="请输入手机号码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Phone />
+            <Phone/>
           </el-icon>
         </template>
       </el-input>
@@ -68,9 +68,9 @@
     <!-- 用户角色 -->
     <el-form-item label="用户角色" prop="role">
       <el-select v-model="registerForm.role" placeholder="请选择用户角色" class="w-full">
-        <el-option label="学生" value="1" />
-        <el-option label="教师" value="2" />
-        <el-option label="管理员" value="3" />
+        <el-option value="1" label="学生"/>
+        <el-option value="2" label="教师"/>
+        <el-option value="3" label="管理员"/>
       </el-select>
     </el-form-item>
 
@@ -79,11 +79,11 @@
       <el-input v-model="registerForm.captcha" placeholder="请输入验证码" class="flex-1">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Unlock />
+            <Unlock/>
           </el-icon>
         </template>
       </el-input>
-      <Captcha :captchaUrl="captchaUrl" @refresh-captcha="refreshCaptcha" />
+      <Captcha :captchaUrl="captchaUrl" @refresh-captcha="refreshCaptcha"/>
     </el-form-item>
 
     <!-- 注册按钮 -->
@@ -99,13 +99,12 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
-import { register } from '@/api/auth';
-import { ElMessage } from 'element-plus';
-import { Lock, Unlock, User, Phone } from '@element-plus/icons-vue';
+import {ref, defineProps, defineEmits} from 'vue';
+import {register} from '@/api/auth';
+import {ElMessage} from 'element-plus';
+import {Lock, Unlock, User, Phone} from '@element-plus/icons-vue';
 import Captcha from "@/components/Auth/Captcha.vue";
-import { rules , validateConfirmPassword, } from "@/utils/validationRules.js";
-
+import {rules, validateConfirmPassword} from "@/utils/validationRules.js";
 
 const props = defineProps({
   captchaUrl: String,
@@ -134,12 +133,14 @@ const registerForm = ref({
 
 const formRef = ref(null);
 
-const handleRegister = () => {
-  formRef.value.validate((valid) => {
+const handleRegister = async () => {
+  try {
+    const valid = await formRef.value.validate();
     if (!valid) {
       return;
     }
-    const { username, password, confirmPassword, name, sex, phone, role, captcha } = registerForm.value;
+
+    const {username, password, confirmPassword, name, sex, phone, role, captcha} = registerForm.value;
     const registerData = {
       username,
       password,
@@ -150,23 +151,21 @@ const handleRegister = () => {
       role: parseInt(role, 10),
       captcha
     };
-    register(registerData)
-        .then(({ data }) => {
-          if (data.message === '注册成功') {
-            ElMessage.success('注册成功,请登录');
-            emit('go-to-login');
-          } else {
-            ElMessage.error(data.message);
-            refreshCaptcha();
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          ElMessage.error('注册失败，请稍后重试！');
-          refreshCaptcha();
-        });
-  });
+
+    const response = await register(registerData);
+    if (response.data.message === '注册成功') {
+      ElMessage.success('注册成功,请登录');
+      emit('go-to-login');
+    } else {
+      ElMessage.error(response.data.message);
+      refreshCaptcha();
+    }
+  } catch (error) {
+    ElMessage.error('注册失败，请稍后重试！');
+    refreshCaptcha();
+  }
 };
+
 
 const refreshCaptcha = () => {
   emit('refresh-captcha');

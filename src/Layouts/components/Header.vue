@@ -14,6 +14,7 @@
         <h1
             v-show="isCollapsed"
             class="font-mono text-gray-800 transition-opacity duration-300"
+            :key="'title-header'"
         >
           教务管理系统
         </h1>
@@ -23,7 +24,7 @@
       <el-dropdown @command="handleCommand" trigger="click">
         <div class="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded-full p-1 transition-colors duration-200">
           <el-avatar :size="40" :src="avatarUrl" class="border-2 border-gray-200"/>
-          <span class="text-gray-700">姜小鱼</span>
+          <span class="text-gray-700">{{ username }}</span>
           <el-icon class="text-gray-500">
             <ArrowDown/>
           </el-icon>

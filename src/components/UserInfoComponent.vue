@@ -1,35 +1,35 @@
 <template>
-    <h2 class="flex justify-center items-center font-bold text-3xl">用户信息</h2>
-    <div v-if="userInfo" class="mt-7">
-      <el-form label-width="100px" class="space-y-4">
-        <el-form-item label="用户名">
-          <el-input v-model="userInfo.username" class="w-full" ></el-input>
-        </el-form-item>
-        <el-form-item label="角色">
-          <el-input v-model="userInfo.roleName" class="w-full" ></el-input>
-        </el-form-item>
-        <el-form-item label="姓名">
-          <el-input v-model="userInfo.name" class="w-full" ></el-input>
-        </el-form-item>
-        <el-form-item label="性别">
-          <el-input v-model="userInfo.sex" class="w-full" ></el-input>
-        </el-form-item>
-        <el-form-item label="电话">
-          <el-input v-model="userInfo.phone" class="w-full" ></el-input>
-        </el-form-item>
-        <el-form-item label="简介">
-          <el-input v-model="userInfo.introduction" type="textarea" class="w-full" ></el-input>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div v-else>
-      <p class="text-gray-500">加载中...</p>
-    </div>
+  <h2 class="flex justify-center items-center font-bold text-3xl">用户信息</h2>
+  <div v-if="userInfo" class="mt-7">
+    <el-form label-width="100px" class="space-y-4">
+      <el-form-item label="用户名">
+        <el-input v-model="userInfo.username" class="w-full"></el-input>
+      </el-form-item>
+      <el-form-item label="角色">
+        <el-input v-model="userInfo.roleName" class="w-full"></el-input>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="userInfo.name" class="w-full"></el-input>
+      </el-form-item>
+      <el-form-item label="性别">
+        <el-input v-model="userInfo.sex" class="w-full"></el-input>
+      </el-form-item>
+      <el-form-item label="电话">
+        <el-input v-model="userInfo.phone" class="w-full"></el-input>
+      </el-form-item>
+      <el-form-item label="简介">
+        <el-input v-model="userInfo.introduction" type="textarea" class="w-full"></el-input>
+      </el-form-item>
+    </el-form>
+  </div>
+  <div v-else>
+    <p class="text-gray-500">加载中...</p>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { getUserInfoApi } from '@/api/user.js';
+import {ref, onMounted} from 'vue';
+import {getUserInfoApi} from '@/api/user.js';
 
 const userInfo = ref({
   username: '',

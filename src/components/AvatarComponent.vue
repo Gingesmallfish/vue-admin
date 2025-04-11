@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center space-y-4 p-6">
-    <el-avatar :size="180" :src="avatar" />
+    <el-avatar :size="180" :src="avatar"/>
     <div class="flex space-x-4 gap-6">
       <el-button type="primary" @click="dialogUploadVisible = true">上传头像</el-button>
       <el-button type="success" @click="dialogEditVisible = true">修改头像</el-button>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import {ref} from 'vue';
 import UploadAvatarDialog from "@/components/UploadAvatarDialog.vue";
 
 const avatar = ref('https://example.com/avatar.jpg'); // 替换为实际的头像URL

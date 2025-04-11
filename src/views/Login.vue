@@ -37,6 +37,7 @@ import LoginForm from "../components/Auth/LoginForm.vue";
 import {useCaptcha} from '../utils/Captcha.js';
 import {login} from "../api/auth";
 import {ElMessage} from "element-plus";
+import { computed } from 'vue';
 
 const {captchaUrl, refreshCaptcha} = useCaptcha();
 const router = useRouter();
@@ -52,7 +53,12 @@ defineProps({
 const loginDisabled = ref(false);
 const countdown = ref(0);
 
+const isLoggedIn = computed(() => store.getters.isLoggedIn);
 const handleSubmit = (loginData) => {
+  if (isLoggedIn.value) {
+    ElMessage.error('您已经登录，请勿重复登录');
+    return;
+  }
   login(loginData)
       .then((res) => {
         const {data} = res;

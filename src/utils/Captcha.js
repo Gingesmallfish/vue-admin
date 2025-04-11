@@ -1,18 +1,23 @@
+import {ref} from "vue";
 import { getCaptcha } from '@/api/auth';
 import { ElMessage } from 'element-plus';
-import {ref} from "vue";
 
 export const useCaptcha = () => {
-  const captchaUrl = ref('');
+  const captchaUrl = ref(''); // 验证码图片的URL
 
+  //
   const refreshCaptcha = async () => {
     try {
       const response = await getCaptcha();
       const base64Image = arrayBufferToBase64(response.data);
       captchaUrl.value = `data:image/svg+xml;base64,${base64Image}`;
+      // 验证码获取失败, 显示错误信息
+      if (!captchaUrl.value){
+        ElMessage.error('获取验证码失败，请稍后重试');
+      }
     } catch (error) {
       console.error('获取验证码失败:', error);
-      ElMessage.error('获取验证码失败，请稍后重试');
+
     }
   };
 
@@ -23,9 +28,9 @@ export const useCaptcha = () => {
     for (let i = 0; i < len; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
+
     return btoa(binary);
   };
-
   return {
     captchaUrl,
     refreshCaptcha

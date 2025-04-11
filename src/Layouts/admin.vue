@@ -1,61 +1,25 @@
 <template>
-  <div class="common-layout">
-    <!-- 使用单个 el-container 包裹整个页面 -->
-    <el-container class="min-h-screen">
-      <!-- 侧边栏 -->
-      <el-aside :width="$store.state.asideWidth" class="transition-all duration-300 bg-white border-r shadow-xm">
-        <Menus :is-collapse="$store.state.asideWidth === '65px'" />
-      </el-aside>
-
-      <!-- 主内容区域 -->
-      <el-container class="flex flex-col w-full">
-        <!-- 头部 -->
-        <el-header class="bg-white border-b shadow-sm justify-between items-center flex px-3 ">
-          <FHeader @showProfile="showProfile" />
-        </el-header>
-
-        <!-- 主体内容 -->
-        <el-main class="bg-gray-100 p-4">
-          <!-- 根据 isProfileVisible 决定显示 Profile 组件还是路由匹配的组件 -->
-          <Profile v-if="isProfileVisible" @close="hideProfile"  />
-          <router-view v-else />
-        </el-main>
-      </el-container>
+  <el-container class="common-layout">
+    <el-aside width="200px">
+      <Menus></Menus>
+    </el-aside>
+    <el-container>
+      <el-header>
+          <Header></Header>
+      </el-header>
+      <el-main>
+        <router-view ></router-view>
+      </el-main>
+      <el-footer>Footer</el-footer>
     </el-container>
-  </div>
+  </el-container>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
-// 引入 FHeader 组件
-import FHeader from "./components/Header.vue";
-// 引入 Profile 组件
-import Profile from "./components/Profile.vue";
-// 引入 Menus 组件
-import Menus from "./components/Menus.vue";
-
-const route = useRoute();
-
-// 定义响应式变量 isProfileVisible，用于控制是否显示个人资料页面
-const isProfileVisible = ref(false);
-
-// 监听路由变化，当路由发生变化时自动隐藏Profile组件
-watch(() => route.path, () => {
-  isProfileVisible.value = false;
-});
-
-// 显示个人资料页面的方法
-const showProfile = () => {
-  isProfileVisible.value = true;
-};
-
-// 隐藏个人资料页面的方法
-const hideProfile = () => {
-  isProfileVisible.value = false;
-};
+import Header from "@/Layouts/components/Header.vue";
+import Menus from "@/Layouts/components/Menus.vue";
 </script>
 
-<style scoped lang="scss">
-// 如果需要局部样式，可以在这里添加
+<style lang="scss" scoped>
+
 </style>

@@ -7,7 +7,7 @@
         >
             <template #extra>
                 <el-button type="primary" @click="$router.push('/admin')">回到首页</el-button>
-            </template>
+            </template>¬
         </el-result>
     </div>
 </template>

@@ -1,43 +1,44 @@
 <template>
-  <div class="w-full h-full">
-    <el-menu>
-      <h2 class="h-[60px] flex justify-center items-center">教务管理系统</h2>
-      <template v-for="item in sidebar" :key="item.id">
-        <el-menu-item v-if="!item.children || item.children.length === 0" :index="item.id.toString()">
-          <router-link :to="item.link" style="text-decoration: none; color: inherit;">
-            <i :class="item.icon"></i>
-            <span>{{ item.title }}</span>
-          </router-link>
-        </el-menu-item>
-        <el-sub-menu v-else :index="item.id.toString()">
+  <el-menu :default-active="$route.path" mode="vertical" router>
+    <template v-for="menu in menuList" :key="menu.id" >
+      <template v-if="menu.children && menu.children.length > 0">
+        <el-sub-menu :index="menu.path">
           <template #title>
-            <i :class="item.icon"></i>
-            <span>{{ item.title }}</span>
+            <i :class="`el-icon-${menu.icon}`"></i>
+            <span>{{ menu.name }}</span>
           </template>
-          <el-menu-item v-for="child in item.children" :key="child.id" :index="child.id.toString()">
-            <router-link :to="child.link" style="text-decoration: none; color: inherit;">
-              <i :class="child.icon"></i>
-              <span>{{ child.title }}</span>
-            </router-link>
-          </el-menu-item>
+          <template v-for="child in menu.children" :key="child.id">
+            <el-menu-item :index="child.path">
+              <i :class="`el-icon-${child.icon}`"></i>
+              <span>{{ child.name }}</span>
+            </el-menu-item>
+          </template>
         </el-sub-menu>
       </template>
-    </el-menu>
-  </div>
+      <el-menu-item v-else :index="menu.path">
+        <i :class="`el-icon-${menu.icon}`"></i>
+        <span>{{ menu.name }}</span>
+      </el-menu-item>
+    </template>
+  </el-menu>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import lesson from '@/api/menus/menus.json';
-
-const sidebar = ref([]);
-
+import menus from '@/db/menus.json';
+const menuList = ref([]);
 onMounted(() => {
-  console.log('Lesson data:', lesson); // 添加调试日志
-  sidebar.value = lesson.sidebar;
+  menuList.value = menus;
 });
 
 </script>
 
+
 <style lang="scss" scoped>
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  @apply w-full;
+}
+.el-menu {
+  border-right: none;
+}
 </style>

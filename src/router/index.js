@@ -1,13 +1,40 @@
-import {createRouter, createWebHashHistory} from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import store from '../store/index.js';
-import {ElMessage} from 'element-plus';
-import defaultRoutes from './config.js';
+import { ElMessage } from 'element-plus';
+import adminRoutes from './adminRoutes.js';
 
-// 创建路由
+// 公共路由
 const router = createRouter({
     history: createWebHashHistory(),
-    routes: defaultRoutes
+    routes: [
+        {
+            path: '/login',
+            name: 'Login',
+            component: () => import('@/views/Login.vue'),
+            meta: { title: '教务管理系统登录' }
+        },
+        {
+            path: '/register',
+            name: 'Register',
+            component: () => import('@/views/Register.vue'),
+            meta: { title: '教务管理系统注册' }
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: () => import('@/Layouts/admin.vue'),
+            meta: { requiresAuth: true, title: '教务管理系统' },
+            children: adminRoutes
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'NotFound',
+            component: () => import('@/NotFound/404.vue'),
+            meta: { title: '404 页面' }
+        },
+    ]
 });
+
 
 // 路由守卫
 router.beforeEach(async (to, from, next) => {
@@ -19,24 +46,10 @@ router.beforeEach(async (to, from, next) => {
         ElMessage.error('您还没有权限，请登录后访问');
         next('/login');
     } else if (store.getters.isLoggedIn && to.path === '/login') {
-        next('/admin'); // 这里假设登录后默认跳转到 /admin
+        next('/admin'); // 登陆成功过后跳转到admin
     } else {
         next();
     }
 });
-
-// 动态添加路由的方法
-export function addRoutes(routes) {
-    try {
-        routes.forEach(route => {
-            if (!router.hasRoute(route.name)) {
-                router.addRoute('admin', route);
-            }
-        });
-    } catch (error) {
-        console.error('动态添加路由失败:', error);
-        throw error;
-    }
-}
 
 export default router;
