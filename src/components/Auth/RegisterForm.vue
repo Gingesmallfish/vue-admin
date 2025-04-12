@@ -5,7 +5,7 @@
       <el-input v-model="registerForm.username" placeholder="请输入用户名">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <User/>
+            <User />
           </el-icon>
         </template>
       </el-input>
@@ -16,7 +16,7 @@
       <el-input v-model="registerForm.password" type="password" placeholder="请输入密码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Lock/>
+            <Lock />
           </el-icon>
         </template>
       </el-input>
@@ -27,7 +27,7 @@
       <el-input v-model="registerForm.confirmPassword" type="password" placeholder="请再次输入密码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Lock/>
+            <Lock />
           </el-icon>
         </template>
       </el-input>
@@ -38,7 +38,7 @@
       <el-input v-model="registerForm.name" placeholder="请输入姓名">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <User/>
+            <User />
           </el-icon>
         </template>
       </el-input>
@@ -59,7 +59,7 @@
       <el-input v-model="registerForm.phone" placeholder="请输入手机号码">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Phone/>
+            <Phone />
           </el-icon>
         </template>
       </el-input>
@@ -68,9 +68,9 @@
     <!-- 用户角色 -->
     <el-form-item label="用户角色" prop="role">
       <el-select v-model="registerForm.role" placeholder="请选择用户角色" class="w-full">
-        <el-option value="1" label="学生"/>
-        <el-option value="2" label="教师"/>
-        <el-option value="3" label="管理员"/>
+        <el-option value="1" label="学生" />
+        <el-option value="2" label="教师" />
+        <el-option value="3" label="管理员" />
       </el-select>
     </el-form-item>
 
@@ -79,16 +79,16 @@
       <el-input v-model="registerForm.captcha" placeholder="请输入验证码" class="flex-1">
         <template #prefix>
           <el-icon class="text-gray-400">
-            <Unlock/>
+            <Unlock />
           </el-icon>
         </template>
       </el-input>
-      <Captcha :captchaUrl="captchaUrl" @refresh-captcha="refreshCaptcha"/>
+      <Captcha :captchaUrl="captchaUrl" @refresh-captcha="refreshCaptcha" />
     </el-form-item>
 
     <!-- 注册按钮 -->
     <el-form-item>
-      <el-button type="primary" @click="handleRegister" class="w-full">{{ props.button }}</el-button>
+      <el-button type="primary" @click="handleRegisterForm" class="w-full">{{ props.button }}</el-button>
     </el-form-item>
 
     <!-- 跳转到登录 -->
@@ -99,82 +99,60 @@
 </template>
 
 <script setup>
-import {ref, defineProps, defineEmits} from 'vue';
-import {register} from '@/api/auth';
-import {ElMessage} from 'element-plus';
-import {Lock, Unlock, User, Phone} from '@element-plus/icons-vue';
+import { ref, } from "vue";
+import { Lock, Unlock, User, Phone } from "@element-plus/icons-vue";
 import Captcha from "@/components/Auth/Captcha.vue";
-import {rules, validateConfirmPassword} from "@/utils/validationRules.js";
+import { rules, validateConfirmPassword } from "@/utils/validationRules.js";
+import { handleRegister } from "@/utils/register.js"; // 引入封装的注册方法
 
-const props = defineProps({
+defineProps({
   captchaUrl: String,
   button: {
     type: String,
-    default: '注册',
+    default: "注册",
   },
   goToLogin: {
     type: String,
-    default: '没有账号？去登录',
+    default: "没有账号？去登录",
   },
 });
 
-const emit = defineEmits(['refresh-captcha', 'go-to-login']);
+defineEmits(["refresh-captcha", "go-to-login"]);
 
 const registerForm = ref({
-  username: '',
-  password: '',
-  confirmPassword: '',
-  name: '',
-  sex: '',
-  phone: '',
-  role: '',
-  captcha: '',
+  username: "",
+  password: "",
+  confirmPassword: "",
+  name: "",
+  sex: "",
+  phone: "",
+  role: "",
+  captcha: "",
 });
 
 const formRef = ref(null);
 
-const handleRegister = async () => {
+const handleRegisterForm = async () => {
   try {
     const valid = await formRef.value.validate();
     if (!valid) {
       return;
     }
 
-    const {username, password, confirmPassword, name, sex, phone, role, captcha} = registerForm.value;
-    const registerData = {
-      username,
-      password,
-      confirmPassword,
-      name,
-      sex,
-      phone,
-      role: parseInt(role, 10),
-      captcha
-    };
-
-    const response = await register(registerData);
-    if (response.data.message === '注册成功') {
-      ElMessage.success('注册成功,请登录');
-      emit('go-to-login');
-    } else {
-      ElMessage.error(response.data.message);
-      refreshCaptcha();
-    }
+    const registerData = { ...registerForm.value, role: parseInt(registerForm.value.role, 10) };
+    handleRegister(registerData, refreshCaptcha, () => emit("go-to-login")); // 调用封装的注册方法
   } catch (error) {
-    ElMessage.error('注册失败，请稍后重试！');
-    refreshCaptcha();
+    console.error(error);
   }
 };
 
-
 const refreshCaptcha = () => {
-  emit('refresh-captcha');
+  emit("refresh-captcha");
 };
 
-// 传递 registerForm 给我的工具验证规则
-rules.confirmPassword[1].validator = (rule, value, callback) => validateConfirmPassword(registerForm)(rule, value, callback);
+// 传递 registerForm 给验证规则
+rules.confirmPassword[1].validator = (rule, value, callback) =>
+  validateConfirmPassword(registerForm)(rule, value, callback);
 </script>
 
-<style scoped lang="scss">
-/* 这里可以根据需要添加一些无法用 Element Plus 类名实现的特殊样式 */
-</style>
+<style scoped lang="scss"></style>

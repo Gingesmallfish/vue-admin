@@ -6,8 +6,15 @@ export default {
   ],
   theme: {
     extend: {
-      margin: {
-
+      // 自定义样式
+      animation: {
+        progress: 'progress 2s linear infinite',
+      },
+      keyframes: {
+        progress: {
+          from: { width: '0%' },
+          to: { width: '100%' },
+        },
       },
     },
   },

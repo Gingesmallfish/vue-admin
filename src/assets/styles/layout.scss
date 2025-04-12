@@ -14,8 +14,8 @@ body, html {
   }
 
   .el-aside {
-    @apply bg-white border-r border-gray-200 shadow-sm transition-all duration-300;
-    width: 200px;
+    @apply  border-r  shadow-sm transition-all duration-300;
+    transition:  width 0.3s ease;
 
     &.collapsed {
       width: 65px;
@@ -28,9 +28,10 @@ body, html {
 
   .el-main {
     @apply bg-gray-100 p-0 flex-1;
+    transition: margin-left 0.3s;
   }
 
   .el-footer {
-    @apply bg-white border-t border-gray-200 text-center p-3;
+    @apply bg-white border-t border-gray-200 text-center flex items-center justify-center;
   }
 }

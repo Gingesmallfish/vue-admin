@@ -8,17 +8,7 @@
           <component :is="isCollapsed ? 'Expand' : 'Fold'"></component>
         </el-icon>
       </el-button>
-      <!-- 根据侧边栏是否折叠来显示或隐藏标题 -->
-      <!-- 标题显示逻辑 -->
-      <TransitionGroup name="fade" >
-        <h1
-            v-show="isCollapsed"
-            class="font-mono text-gray-800 transition-opacity duration-300"
-            :key="'title-header'"
-        >
-          教务管理系统
-        </h1>
-      </TransitionGroup>
+
     </div>
     <div class="flex items-center space-x-4">
       <el-dropdown @command="handleCommand" trigger="click">
@@ -51,7 +41,7 @@
 </template>
 
 <script setup>
-import { computed, defineEmits, ref, onMounted } from 'vue';
+import { computed, defineEmits, ref, } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';

@@ -30,7 +30,7 @@ const router = createRouter({
             path: '/:pathMatch(.*)*',
             name: 'NotFound',
             component: () => import('@/NotFound/404.vue'),
-            meta: { title: '404 页面' }
+            meta: { title: '404 页面', requiresAuth: true }
         },
     ]
 });
@@ -44,6 +44,7 @@ router.beforeEach(async (to, from, next) => {
     // 权限验证
     if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
         ElMessage.error('您还没有权限，请登录后访问');
+
         next('/login');
     } else if (store.getters.isLoggedIn && to.path === '/login') {
         next('/admin'); // 登陆成功过后跳转到admin

@@ -1,19 +1,20 @@
 import {createStore} from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
-import {login} from "@/api/auth.js";
 
 // 创建 Vuex store 实例
 const store = createStore({
     // 定义状态（state）
     state() {
         return {
-            token: null, // 用户认证令牌
-            user: null, // 用户信息
-            redirectPath: null, // 重定向路径
+            token: '', // 用户认证令牌
+            user: '', // 用户信息
+            redirectPath: '', // 重定向路径
             asideWidth: "250px", // 侧边栏宽度
-            username: null, // 用户名
-            password: null, // 密码
-            captcha: null // 验证码
+            username: '', // 用户名
+            password: '', // 密码
+            captcha: '', // 验证码
+            tabs: [],
+            activeTab: '/'
         };
     },
     // 定义 mutations，用于修改 state
@@ -45,6 +46,21 @@ const store = createStore({
         // 设置重定向路径
         setRedirectPath(state, path) {
             state.redirectPath = path;
+        },
+        addTab(state, tab) {
+            if (!state.tabs.some(t => t.path === tab.path)) {
+                state.tabs.push(tab)
+            }
+            state.activeTab = tab.path;
+        },
+        setActiveTab(state, path) {
+            state.activeTab = path;
+        },
+        removeTab(state, path) {
+            state.tabs = state.tabs.filter(tab => tab.path !== path);
+            if (state.activeTab === path) {
+                state.activeTab = state.tabs.length > 0 ? state.tabs[state.tabs.length - 1].path : '';
+            }
         }
     },
     // 定义 actions，用于处理异步操作并提交 mutations

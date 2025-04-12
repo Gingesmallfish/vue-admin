@@ -1,46 +1,44 @@
 <template>
-  <div class="login-container">
-    <!-- 左侧图片及文字 -->
-    <div class="left-column">
-      <div class="overlay"></div>
-      <div class="left-content">
-        <h1 class="title">{{ title }}</h1>
-        <div class=" w-1/3 text-white overflow-hidden ">
-          <p class="description">开启教务管理新体验</p>
+  <WatermarkWrapper class="absolute inset-0">
+    <div class="login-container">
+      <!-- 左侧图片及文字 -->
+      <div class="left-column">
+        <div class="overlay"></div>
+        <div class="left-content">
+          <h1 class="title">{{ title }}</h1>
+          <div class="w-1/3 text-white overflow-hidden">
+            <!-- 使用 AnimatedText 组件 -->
+            <AnimatedText animationName="roll" duration="5s" />
+          </div>
+        </div>
+      </div>
+      <!-- 右侧登录表单 -->
+      <div class="right-column">
+        <div class="form-container fade-in">
+          <!-- 添加标题 -->
+          <h2 class="form-title">教务管理系统登录</h2>
+          <LoginForm :captchaUrl="captchaUrl" @submit="handleSubmit" @refresh-captcha="refreshCaptcha"
+            @go-to-register="gotoRegister" :loginDisabled="loginDisabled" :countdown="countdown" />
         </div>
       </div>
     </div>
-    <!-- 右侧登录表单 -->
-    <div class="right-column">
-      <div class="form-container fade-in">
-        <!-- 添加标题 -->
-        <h2 class="form-title">教务管理系统登录</h2>
-        <LoginForm
-            :captchaUrl="captchaUrl"
-            @submit="handleSubmit"
-            @refresh-captcha="refreshCaptcha"
-            @go-to-register="gotoRegister"
-            :loginDisabled="loginDisabled"
-            :countdown="countdown"
-        />
-      </div>
-    </div>
-  </div>
+  </WatermarkWrapper>
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from 'vue';
-import {useRouter} from 'vue-router';
-
-import store from '../store/index.js';
+import { onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useCaptcha } from "../utils/Captcha.js";
+import { handleLogin } from "../utils/login.js"; // 引入封装的登录方法
 import LoginForm from "../components/Auth/LoginForm.vue";
-import {useCaptcha} from '../utils/Captcha.js';
-import {login} from "../api/auth";
-import {ElMessage} from "element-plus";
-import { computed } from 'vue';
+import WatermarkWrapper from "../components/WatermarkWrapper.vue";
+import AnimatedText from "../components/AnimatedText.vue";
 
-const {captchaUrl, refreshCaptcha} = useCaptcha();
+const { captchaUrl, refreshCaptcha } = useCaptcha();
 const router = useRouter();
+
+const loginDisabled = ref(false);
+const countdown = ref(0);
 
 // 获取标题
 defineProps({
@@ -50,40 +48,7 @@ defineProps({
   }
 });
 
-const loginDisabled = ref(false);
-const countdown = ref(0);
-
-const isLoggedIn = computed(() => store.getters.isLoggedIn);
-const handleSubmit = (loginData) => {
-  if (isLoggedIn.value) {
-    ElMessage.error('您已经登录，请勿重复登录');
-    return;
-  }
-  login(loginData)
-      .then((res) => {
-        const {data} = res;
-        if (data.message === '登录成功') {
-          const {token, user} = data;
-          const {username, password, captcha} = loginData;
-          store.dispatch('login', {token, user, username, password, captcha});
-          ElMessage.success('登录成功');
-          router.push('/admin'); // 确保这里正确跳转
-        } else {
-          ElMessage.error(data.message);
-          refreshCaptcha();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-        ElMessage.error('登录失败，60s之后重新登录 ');
-        startCountdown();
-      });
-};
-
-const gotoRegister = () => {
-  router.push('/register');
-};
-
+// 启动倒计时
 const startCountdown = () => {
   loginDisabled.value = true;
   countdown.value = 60;
@@ -97,10 +62,21 @@ const startCountdown = () => {
   }, 1000);
 };
 
+// 提交登录
+const handleSubmit = (loginData) => {
+  handleLogin(loginData, router, refreshCaptcha, startCountdown); // 调用封装的登录方法
+};
+
+// 跳转到注册页面
+const gotoRegister = () => {
+  router.push("/register");
+};
+
 onMounted(() => {
   refreshCaptcha();
 });
 
+// 监听倒计时的变化
 watch(countdown, (newCountdown) => {
   if (newCountdown === 0) {
     loginDisabled.value = false;
@@ -113,38 +89,24 @@ watch(countdown, (newCountdown) => {
   @apply flex flex-wrap min-h-screen cursor-pointer bg-gray-100;
 
   .left-column {
-    @apply lg:w-2/5 md:w-1/2 w-full bg-cover bg-center relative;
+    @apply lg:w-2/5 md:w-1/2 w-full bg-cover bg-center relative z-10;
     background-image: url('@/assets/images/register.png');
 
     .overlay {
       @apply absolute inset-0 bg-black bg-opacity-50;
-      /* 调整不透明度 */
     }
 
     .left-content {
-      @apply relative flex flex-col h-full justify-center items-center p-8  bg-opacity-30;
+      @apply relative flex flex-col h-full justify-center items-center bg-opacity-30;
 
       .title {
         @apply text-4xl font-bold text-white mb-4;
-      }
-
-      .description {
-        @apply w-max whitespace-nowrap;
-        animation: roll 5s linear infinite;
-
-        &::before {
-          content: '';
-          display: inline-block;
-          // 这里的长度需要与最外层容器一致
-          width: 13rem;
-          height: 100%;
-        }
       }
     }
   }
 
   .right-column {
-    @apply lg:w-3/5 md:w-1/2 w-full flex justify-center items-center p-8 relative;
+    @apply lg:w-3/5 md:w-1/2 w-full flex justify-center items-center relative z-10;
 
     .form-container {
       @apply w-full max-w-md bg-white p-8 rounded-lg shadow-lg transition-shadow duration-300 ease-in-out;
@@ -177,22 +139,13 @@ watch(countdown, (newCountdown) => {
   animation: fadeIn 0.5s ease-out;
 }
 
-@keyframes roll {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-100%);
-  }
-}
-
 // 淡入动画关键帧
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

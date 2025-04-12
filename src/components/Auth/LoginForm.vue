@@ -35,7 +35,7 @@
 
       <!-- 验证码 -->
       <el-form-item label="验证码" prop="captcha" class="flex items-center  space-3">
-        <el-input v-model="loginForm.captcha" placeholder="请输入验证码" class="flex-1">
+        <el-input v-model="loginForm.captcha" placeholder="请输入验证码"  class="flex-1">
           <template #prefix>
             <el-icon class="text-gray-400">
               <Unlock />
@@ -59,16 +59,16 @@
 
       <!-- 跳转到注册 -->
       <el-form-item>
-        <a @click="emit('go-to-register')" class="text-blue-500 hover:underline fade-in underline-offset-8">
+        <el-link @click="emit('go-to-register')" class="text-blue-500 hover:underline fade-in underline-offset-8">
           {{ goToRegister }}
-        </a>
+        </el-link>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
+import { ref } from 'vue';
 import {Lock, Unlock, User, View, Hide} from '@element-plus/icons-vue';
 import Captcha from "@/components/Auth/Captcha.vue";
 import { rules } from "@/utils/validationRules.js";

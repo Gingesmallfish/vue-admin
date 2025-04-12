@@ -3,5 +3,18 @@
 @tailwind utilities;
 
 
+@layer utilities {
+    @keyframes progress {
+        from {
+            width: 0%;
+        }
 
+        to {
+            width: 100%;
+        }
+    }
 
+    .animate-progress {
+        animation: progress 2s linear infinite;
+    }
+}
